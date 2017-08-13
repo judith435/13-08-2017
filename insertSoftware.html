@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Software App</title>
+</head>
+<body>
+    <form method="post" action="SoftwareApi.php">
+        <fieldset>
+            <legend>Add Software</legend>
+            <label>SoftWare Name: <input type="text" name="softwareName" maxlength="45"></label>
+            <label>Vendor: <select class="vendor"  name="vendor">{{vendor}}</select></label>
+            <br><br>
+            <button  name="activity" value="AddSoftWare">Add SoftWare</button>
+        </fieldset>    
+    </form>
+    <script src='main.js'></script>
+</body>
+</html>

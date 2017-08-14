@@ -2,13 +2,17 @@
 <html>
 <head>
     <title>Software App</title>
+        <script
+            src="http://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
 </head>
 <body>
     <form method="post" action="SoftwareApi.php">
         <fieldset>
             <legend>Add Software</legend>
             <label>SoftWare Name: <input type="text" name="softwareName" maxlength="45"></label>
-            <label>Vendor: <select class="vendor"  name="vendor">{{vendor}}</select></label>
+            <label>Vendor: <select id="vendorDDL"  name="vendor"></select></label>
             <br><br>
             <button  name="activity" value="AddSoftWare">Add SoftWare</button>
         </fieldset>    

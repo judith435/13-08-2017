@@ -4,9 +4,9 @@
         private $id;
         private $name;
 
-        public function __construct($sw_id, $sw_name, $v_id){
-            $this->id = $sw_id;
-            $this->setEmpName($sw_name);
+        public function __construct($id, $name){
+            $this->setID($id);
+            $this->setName($name);
 
         }
 
@@ -18,10 +18,33 @@
             return $this->name;
         }
 
-
-        public function setName($sw_name){
-            $this->name = $sw_name;
+        public function setID($id){
+            $this->id = $id;
         }
+
+        public function setName($name){
+            $this->name = $name;
+        }
+
+
+        public static function getVendors() {
+            $emptyParms = []; 
+            $con = new Connection('ls47');
+            $sqlStatement = "SELECT id , name  FROM vendors";
+            $stmt = $con->executeStatement($sqlStatement, $emptyParms);
+            //$json1 =  json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+            //$obj = json_decode($json1,true);
+
+            $Vendors = array();
+            while ($row = $stmt->fetch())
+            {
+               array_push($Vendors, new Vendor($row['id'], $row['name']));
+            }
+           
+            return $Vendors;
+        }  
+
 
     }
 
+?>

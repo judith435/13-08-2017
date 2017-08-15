@@ -1,0 +1,25 @@
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_Software`()
+BEGIN
+
+	SELECT   tblSoftWare.id as sw_id,
+			 tblSoftWare.name as sw_name,
+			 tblVendors.id as vendor_id,
+			 tblVendors.name as vendor_name
+	FROM software tblSoftWare
+	inner join vendors tblVendors 
+	on tblSoftWare.v_id = tblVendors.id
+    order by sw_id, vendor_id;
+    
+END$$
+DELIMITER ;
+
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_Vendors`()
+BEGIN
+	SELECT id , name  FROM vendors union select 0 as id , '' as name order by id; 
+END
+
+
+

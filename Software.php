@@ -52,27 +52,48 @@
         //sql statement with and without parameters
             $emptyParms = []; 
             $con = new Connection('ls47');
-            $sqlStatement = "SELECT  tblSoftWare.id as sw_id,
-                                     tblSoftWare.name as sw_name,
-                                     tblVendors.id as vendor_id,
-                                     tblVendors.name as vendor_name
-                            FROM software tblSoftWare
-                            inner join vendors tblVendors 
-                            on tblSoftWare.v_id = tblVendors.id";
-            $stmt = $con->executeStatement($sqlStatement, $emptyParms);
+            // $sqlStatement = "SELECT  tblSoftWare.id as sw_id,
+            //                          tblSoftWare.name as sw_name,
+            //                          tblVendors.id as vendor_id,
+            //                          tblVendors.name as vendor_name
+            //                 FROM software tblSoftWare
+            //                 inner join vendors tblVendors 
+            //                 on tblSoftWare.v_id = tblVendors.id";
+            // $stmt = $con->executeStatement($sqlStatement, $emptyParms);
+            $sp = $con->executeSP("get_Software", $emptyParms);
+
             //$json1 =  json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
             //$obj = json_decode($json1,true);
 
             $allSoftware = array();
-            while ($row = $stmt->fetch())
+            while ($row = $sp->fetch())
             {
                array_push($allSoftware, new Software($row['sw_id'], $row['sw_name'], $row['vendor_id'], $row['vendor_name']));
             }
            
             return $allSoftware;
-        }  
+        }
 
-            
+
+        public static function addSoftware($softwareName, $vendor_id, $vendor_name) {
+
+            $Software = new Software(0, $softwareName, $vendor_id, $vendor_name);
+
+            $con = new Connection('ls47');
+            $Parms = ["sw_name" => $Software -> getName(), "sw_v_id" => $Software -> getV_id()]; 
+            $stmt = $con->executeStatement('SELECT name FROM software WHERE name = :sw_name  AND v_id = :sw_v_id', $Parms);
+            if ($stmt->rowCount() > 0) {
+                echo "Software with same name (" . $Software->getName() . ") and same vendor (" . $Software -> getV_name() . ") found! Cannot be added!";     
+            }
+            else {
+                $con = new Connection('ls47');
+                $Parms = ["sw_name" => $Software -> getName(), 
+                        "vendor_id" => $Software -> getV_id()]; 
+                $stmt = $con->executeStatement("insert into software (name, v_id)
+                                                values  (:sw_name, :vendor_id)", $Parms);
+                echo 'new software added successfully';
+            }
+        }
 
     }
 

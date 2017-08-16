@@ -43,19 +43,26 @@
             return $stmt;
         }
 
+        public function executeSP_Parms($sp, $sname, $scid) {
+            $pdo = new PDO($this->dsn, $this->user, $this->pass, $this->opt);
 
-        // $stmt = $dbh->prepare("CALL sp_takes_string_returns_string(?)");
-        // $value = 'hello';
-        // $stmt->bindParam(1, $value, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000); 
+            //SELECT name FROM streets WHERE name = :street_name  AND c_id = :street_c_id
+            $sql = 'CALL ' . $sp . '(:streetName, :streetCID)';
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':streetName', $sname, PDO::PARAM_STR);
+            $stmt->bindParam(':streetCID', $scid, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt;
+        }
 
-        // // call the stored procedure
+        //   $sql = 'CALL GetCustomerLevel(:id,@level)';
+        // // prepare for execution of the stored procedure
+        // $stmt = $pdo->prepare($sql);
+        // // pass value to the command
+        // $stmt->bindParam(':id', $customerNumber, PDO::PARAM_INT);
+        // // execute the stored procedure
         // $stmt->execute();
 
-        // $stmt = $dbh->prepare("CALL sp_returns_string(?)");
-        // $stmt->bindParam(1, $return_value, PDO::PARAM_STR, 4000); 
-        // // call the stored procedure
-        // $stmt->execute();
-        // print "procedure returned $return_value\n";
     }
 
 ?>

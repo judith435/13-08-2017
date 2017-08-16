@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cities App</title>
+        <script
+            src="http://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous">
+        </script>
+</head>
+<body>
+    <form method="post" action="CitiesApi.php">
+        <fieldset>
+            <legend>Add Street</legend>
+            <label>Street Name: <input type="text" name="streetName" maxlength="45"></label>
+            <label>City: <select id="citiesDDL"  name="city"></select></label>
+            <br><br>
+            <button  name="activity" value="AddStreet">Add Street</button>
+        </fieldset>    
+    </form>
+     <script src='cities.js'></script> 
+</body>
+</html>

@@ -21,3 +21,176 @@ INSERT INTO `ls47`.`cities` (`name`) VALUES ('Jerusalem');
 INSERT INTO `ls47`.`cities` (`name`) VALUES ('Raanana');
 INSERT INTO `ls47`.`cities` (`name`) VALUES ('Tel Aviv');
 INSERT INTO `ls47`.`cities` (`name`) VALUES ('Zurich');
+
+
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema ls47
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema ls47
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `ls47` DEFAULT CHARACTER SET latin1 ;
+USE `ls47` ;
+
+-- -----------------------------------------------------
+-- Table `ls47`.`cities`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ls47`.`cities` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 6
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `ls47`.`vendors`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ls47`.`vendors` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `ls47`.`software`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ls47`.`software` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL DEFAULT NULL,
+  `v_id` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_sw_vendor_idx` (`v_id` ASC),
+  CONSTRAINT `fk_sw_vendor`
+    FOREIGN KEY (`v_id`)
+    REFERENCES `ls47`.`vendors` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 15
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `ls47`.`streets`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ls47`.`streets` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL DEFAULT NULL,
+  `c_id` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_streets_citites_idx` (`c_id` ASC),
+  CONSTRAINT `fk_streets_citites`
+    FOREIGN KEY (`c_id`)
+    REFERENCES `ls47`.`cities` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 6
+DEFAULT CHARACTER SET = latin1;
+
+USE `ls47` ;
+
+-- -----------------------------------------------------
+-- procedure check_Street_exists
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ls47`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `check_Street_exists`(IN street_name VARCHAR(45), IN street_c_id Int )
+BEGIN
+
+	SELECT name FROM streets WHERE name = street_name  AND c_id = street_c_id;
+    
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure get_Cities
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ls47`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_Cities`()
+BEGIN
+	SELECT id , name  FROM cities union select 0 as id , '' as name order by id; 
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure get_Software
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ls47`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_Software`()
+BEGIN
+
+	SELECT   tblSoftWare.id as sw_id,
+			 tblSoftWare.name as sw_name,
+			 tblVendors.id as vendor_id,
+			 tblVendors.name as vendor_name
+	FROM software tblSoftWare
+	inner join vendors tblVendors 
+	on tblSoftWare.v_id = tblVendors.id
+    order by sw_id, vendor_id;
+    
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure get_Streets
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ls47`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_Streets`()
+BEGIN
+
+	SELECT   tblStreets.id as street_id,
+			 tblStreets.name as street_name,
+			 tblCities.id as city_id,
+			 tblCities.name as city_name
+	FROM streets tblStreets
+	inner join cities tblCities
+	on tblStreets.c_id = tblCities.id
+    order by  city_id, street_id;
+    
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure get_Vendors
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `ls47`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_Vendors`()
+BEGIN
+	SELECT id , name  FROM vendors union select 0 as id , '' as name order by id; 
+END$$
+
+DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+

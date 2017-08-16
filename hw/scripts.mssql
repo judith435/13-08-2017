@@ -1,0 +1,23 @@
+CREATE TABLE `ls47`.`cities` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`));
+
+
+  CREATE TABLE `ls47`.`streets` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `c_id` INT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_streets_citites_idx` (`c_id` ASC),
+  CONSTRAINT `fk_streets_citites`
+    FOREIGN KEY (`c_id`)
+    REFERENCES `ls47`.`cities` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+INSERT INTO `ls47`.`cities` (`name`) VALUES ('London');
+INSERT INTO `ls47`.`cities` (`name`) VALUES ('Jerusalem');
+INSERT INTO `ls47`.`cities` (`name`) VALUES ('Raanana');
+INSERT INTO `ls47`.`cities` (`name`) VALUES ('Tel Aviv');
+INSERT INTO `ls47`.`cities` (`name`) VALUES ('Zurich');

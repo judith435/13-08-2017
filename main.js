@@ -1,6 +1,7 @@
 var app = {
     debugMode: true,
-    vendorsApi: 'http://localhost:8080/joint/13-08-2017/siteActions.php'
+    vendorsApi: 'http://localhost/joint/13-08-2017/siteActions.php'
+    //vendorsApi: 'http://localhost:8080/joint/13-08-2017/siteActions.php'
     //vendorsApi: 'http://localhost:8080/joint/13-08-2017/Vendor.php?action=getVendors'
 
 }

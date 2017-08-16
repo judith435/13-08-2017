@@ -15,11 +15,11 @@ END$$
 DELIMITER ;
 
 
-
+DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_Vendors`()
 BEGIN
 	SELECT id , name  FROM vendors union select 0 as id , '' as name order by id; 
-END
+END$$
 
 
 

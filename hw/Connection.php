@@ -43,9 +43,16 @@
             return $stmt;
         }
 
-        public function executeSP_Parms($sp, $sname, $scid) {
+        //public function executeSP_Parms($sp, $sname, $scid) {
+        public function executeSP_Parms($sp, $parms) {    
             $pdo = new PDO($this->dsn, $this->user, $this->pass, $this->opt);
-
+            $parmList = '(';
+            foreach ($parms as  $key => $valuekey) { // foreach ($parms as $key => $value)
+              $parmList .= ':' . $key . ',';
+            }
+            $parmList = rtrim($parmList, ',');
+            $parmList .= ')';
+            
             //SELECT name FROM streets WHERE name = :street_name  AND c_id = :street_c_id
             $sql = 'CALL ' . $sp . '(:streetName, :streetCID)';
             $stmt = $pdo->prepare($sql);

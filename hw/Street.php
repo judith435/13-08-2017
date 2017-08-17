@@ -1,4 +1,5 @@
 <?php
+    require_once 'PDO_Parm.php';
     class Street { 
 
         //members must be public so that  JSON_encode($streets); in function GetDisplayStreets() in CitiesApi.php will work
@@ -69,10 +70,10 @@
             $Street = new Street(0, $streetName, $city_id, $city_name);
 
             $con = new Connection('ls47');
-            $Parms = ["street_name" => $Street -> getName(), "street_c_id" => $Street -> getC_id()]; 
-            //$stmt = $con->executeStatement('SELECT name FROM streets WHERE name = :street_name  AND c_id = :street_c_id', $Parms);
-            $stmt = $con->executeSP_Parms('check_Street_exists', $Parms);
-            //$stmt = $con->executeSP_Parms('check_Street_exists', $Street -> getName(),  $Street -> getC_id());
+            $Parms =  array();
+            array_push($Parms, new PDO_Parm("street_name", $Street -> getName(), 'string')); 
+            array_push($Parms, new PDO_Parm("street_c_id", $Street -> getC_id(), 'integer'));
+            $stmt = $con->executeSP('check_Street_exists', $Parms);
 
             if ($stmt->rowCount() > 0) {
                 echo "Street with same name (" . $Street->getName() . ") and same city (" . $Street -> getC_name() . ") found! Cannot be added!";     

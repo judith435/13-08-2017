@@ -36,40 +36,25 @@
             return $stmt;
         }
 
-        public function executeSP($sp, $parms) {
-            $pdo = new PDO($this->dsn, $this->user, $this->pass, $this->opt);
-            $stmt = $pdo->prepare("CALL " . $sp . "()");
-            $stmt->execute($parms);
-            return $stmt;
-        }
-
-        //public function executeSP_Parms($sp, $sname, $scid) {
-        public function executeSP_Parms($sp, $parms) {    
+        public function executeSP($sp, $parms) {   
             $pdo = new PDO($this->dsn, $this->user, $this->pass, $this->opt);
             $parmList = '(';
-            foreach ($parms as  $key => $valuekey) { // foreach ($parms as $key => $value)
-              $parmList .= ':' . $key . ',';
+            foreach ($parms as  $parm) {  
+              $parmList .= ':' . $parm->getID() . ',';
             }
             $parmList = rtrim($parmList, ',');
             $parmList .= ')';
-            
-            //SELECT name FROM streets WHERE name = :street_name  AND c_id = :street_c_id
-            $sql = 'CALL ' . $sp . '(:streetName, :streetCID)';
+            $sql = 'CALL ' . $sp . $parmList;
             $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':streetName', $sname, PDO::PARAM_STR);
-            $stmt->bindParam(':streetCID', $scid, PDO::PARAM_INT);
+            foreach ($parms as  $parm) { 
+              $stmt->bindValue(':' . $parm->getID() , $parm->getValue(), $parm->getType());
+            }
+
             $stmt->execute();
             return $stmt;
         }
 
-        //   $sql = 'CALL GetCustomerLevel(:id,@level)';
-        // // prepare for execution of the stored procedure
-        // $stmt = $pdo->prepare($sql);
-        // // pass value to the command
-        // $stmt->bindParam(':id', $customerNumber, PDO::PARAM_INT);
-        // // execute the stored procedure
-        // $stmt->execute();
-
-    }
-
+    } 
 ?>
+
+

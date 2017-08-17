@@ -23,7 +23,6 @@
         $con = new Connection('ls47');
         $sp = $con->executeSP("get_Cities", $emptyParms);
         echo json_encode($sp->fetchAll(PDO::FETCH_ASSOC));
-        
     }
 
 ?>

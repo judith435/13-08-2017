@@ -50,7 +50,7 @@
         }
 
         public static function getAllStreets() {
-        //select statement has no parameters for sql statement -> must send empty parms: executeStatement is general function that executes 
+        //select statement has no parameters for sql statement -> must send empty parms: executeSP is general function that executes 
         //sql statement with and without parameters
             $emptyParms = []; 
             $con = new Connection('ls47');
@@ -80,11 +80,12 @@
             }
             else {
                 $con = new Connection('ls47');
-                $Parms = ["street_name" => $Street -> getName(), 
-                          "city_id" => $Street -> getC_id()]; 
-                $stmt = $con->executeStatement("insert into streets (name, c_id)
-                                                values  (:street_name, :city_id)", $Parms);
-                echo 'new city added successfully';
+                $Parms =  array();
+                array_push($Parms, new PDO_Parm("street_name", $Street -> getName(), 'string')); 
+                array_push($Parms, new PDO_Parm("street_c_id", $Street -> getC_id(), 'integer'));
+                $stmt = $con->executeSP('insert_Street', $Parms);
+
+                 echo 'new street added successfully';
             }
         }
 

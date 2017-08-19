@@ -17,6 +17,22 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 CREATE SCHEMA IF NOT EXISTS `ls47` DEFAULT CHARACTER SET latin1 ;
 USE `ls47` ;
 
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_Street`
+(IN street_name VARCHAR(45), IN street_c_id Int )
+BEGIN
+
+    INSERT INTO `ls47`.`streets`
+	(`name`,
+	`c_id`)
+	VALUES
+	(street_name,
+	 street_c_id);
+     
+END$$
+DELIMITER ;
+
 -- -----------------------------------------------------
 -- Table `ls47`.`cities`
 -- -----------------------------------------------------

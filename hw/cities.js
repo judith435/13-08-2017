@@ -1,6 +1,7 @@
 var app = {
     debugMode: true,
-    citiesApi: 'http://localhost:8080/joint/13-08-2017/hw/siteActions.php'
+    citiesApi: 'http://localhost/joint/13-08-2017/hw/siteActions.php'
+    //citiesApi: 'http://localhost:8080/joint/13-08-2017/hw/siteActions.php'
 
 }
 
